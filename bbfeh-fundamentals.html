@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hướng dẫn thực hành - BBFEH Fundamentals Lab</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: "Times New Roman", Times, serif;
+      font-size: 13pt;
+      line-height: 1.8;
+      color: #1a1a1a;
+      background: #f4f6f9;
+      padding: 30px 20px;
+    }
+
+    .page {
+      max-width: 860px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 50px 60px;
+      border: 1px solid #d0d5dd;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+    }
+
+    .header {
+      text-align: center;
+      border-bottom: 3px solid #003087;
+      padding-bottom: 20px;
+      margin-bottom: 30px;
+    }
+
+    .header .institution {
+      font-size: 11pt;
+      color: #555;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .header h1 {
+      font-size: 20pt;
+      color: #003087;
+      margin-top: 8px;
+      font-weight: bold;
+    }
+
+    .header .subtitle {
+      font-size: 13pt;
+      color: #444;
+      margin-top: 4px;
+      font-style: italic;
+    }
+
+    .header .meta {
+      margin-top: 14px;
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 4px 14px;
+      border-radius: 20px;
+      font-size: 10pt;
+      font-weight: bold;
+    }
+
+    .badge-hard { background: #e8f4fd; color: #0b4f6c; border: 1px solid #8ecae6; }
+    .badge-signal { background: #e8f4fd; color: #0b4f6c; border: 1px solid #8ecae6; }
+    .badge-tool { background: #e6f4ea; color: #216e39; border: 1px solid #b7dfc4; }
+
+    h2 {
+      font-size: 14pt;
+      color: #003087;
+      border-left: 5px solid #003087;
+      padding-left: 10px;
+      margin: 32px 0 12px;
+      font-weight: bold;
+    }
+
+    h3 { font-size: 12.5pt; color: #1a5276; margin: 10px 0 8px; font-weight: bold; }
+    h4 { font-size: 12pt; color: #2e4053; margin: 16px 0 6px; font-weight: bold; }
+    p { margin-bottom: 10px; }
+    ul, ol { margin: 8px 0 10px 24px; }
+    li { margin-bottom: 5px; }
+
+    code {
+      background: #f0f0f0;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      padding: 2px 7px;
+      font-family: "Courier New", monospace;
+      font-size: 11pt;
+      color: #b03a2e;
+    }
+
+    pre {
+      background: #1e1e2e;
+      color: #cdd6f4;
+      border-radius: 8px;
+      padding: 16px 20px;
+      font-family: "Courier New", monospace;
+      font-size: 10.5pt;
+      overflow-x: auto;
+      margin: 10px 0 14px;
+      line-height: 1.6;
+      white-space: pre-wrap;
+    }
+
+    pre .cmd { color: #89dceb; }
+    pre .comment { color: #8b93a8; font-style: italic; }
+
+    .box {
+      border-radius: 6px;
+      padding: 12px 16px;
+      margin: 14px 0;
+      font-size: 12pt;
+    }
+
+    .box-info { background: #e8f4fd; border-left: 5px solid #2196f3; }
+    .box-warning { background: #fff3cd; border-left: 5px solid #ffc107; }
+    .box-danger { background: #fdecea; border-left: 5px solid #f44336; }
+    .box-success { background: #e8f5e9; border-left: 5px solid #4caf50; }
+    .box-note { background: #f3e5f5; border-left: 5px solid #9c27b0; }
+    .box strong { display: inline-block; margin-bottom: 4px; }
+
+    .topology { text-align: center; margin: 18px 0; }
+    .topo-diagram {
+      display: inline-flex;
+      align-items: center;
+      gap: 0;
+      background: #f8fafc;
+      border: 1px solid #cdd0d8;
+      border-radius: 10px;
+      padding: 24px 28px;
+      font-family: "Courier New", monospace;
+      font-size: 11pt;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .topo-node {
+      background: #003087;
+      color: #fff;
+      border-radius: 8px;
+      padding: 14px 18px;
+      text-align: center;
+      min-width: 150px;
+    }
+
+    .topo-node.embed { background: #8b0000; }
+    .topo-node.extract { background: #216e39; }
+    .topo-node .node-label { font-size: 10pt; opacity: 0.9; }
+    .topo-node .node-ip { font-size: 9pt; opacity: 0.75; font-style: italic; }
+
+    .topo-arrow {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 0 14px;
+      gap: 8px;
+    }
+
+    .topo-arrow .arrow-label {
+      font-size: 9.5pt;
+      font-weight: bold;
+      color: #c0392b;
+    }
+
+    .task-block {
+      border: 1px solid #b0c4de;
+      border-radius: 8px;
+      margin: 18px 0;
+      overflow: hidden;
+    }
+
+    .task-header {
+      background: #003087;
+      color: #fff;
+      padding: 10px 18px;
+      font-size: 12.5pt;
+      font-weight: bold;
+    }
+
+    .task-body { padding: 14px 18px; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 14px 0;
+      font-size: 12pt;
+    }
+
+    th {
+      background: #003087;
+      color: #fff;
+      padding: 10px 12px;
+      text-align: left;
+    }
+
+    td {
+      padding: 9px 12px;
+      border: 1px solid #d0d5dd;
+      vertical-align: top;
+    }
+
+    tr:nth-child(even) td { background: #f5f7fa; }
+
+    .footer {
+      margin-top: 40px;
+      border-top: 1px solid #d0d5dd;
+      padding-top: 14px;
+      text-align: center;
+      font-size: 10pt;
+      color: #777;
+    }
+
+    @media print {
+      body { background: #fff; padding: 0; }
+      .page { border: none; box-shadow: none; padding: 30px 40px; max-width: 100%; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page">
+
+    <div class="header">
+      <div class="institution">Học viện Công nghệ Bưu chính Viễn thông — SecLab PTIT</div>
+      <h1>HƯỚNG DẪN THỰC HÀNH</h1>
+      <div class="subtitle">BBFEH Fundamentals Lab — Giấu tin và tách tin bằng kỹ thuật Echo</div>
+      <div class="meta">
+        <span class="badge badge-hard">Mức độ: Trung bình</span>
+        <span class="badge badge-signal">Audio Steganography</span>
+        <span class="badge badge-tool">Embed & Extract</span>
+      </div>
+    </div>
+
+    <h2>1. Giới thiệu Lab</h2>
+    <table>
+      <tr>
+        <th>Thông tin</th>
+        <th>Chi tiết</th>
+      </tr>
+      <tr>
+        <td>Tên Lab</td>
+        <td><code>bbfeh-fundamentals</code></td>
+      </tr>
+      <tr>
+        <td>Mức độ</td>
+        <td>Trung bình</td>
+      </tr>
+      <tr>
+        <td>Chủ đề</td>
+        <td>Audio Steganography, Echo Hiding, BBFEH, Real Cepstrum, Embed/Extract</td>
+      </tr>
+      <tr>
+        <td>Công cụ sử dụng</td>
+        <td><code>ffprobe</code>, <code>sox</code>, <code>gnuplot</code>, <code>python3</code>, <code>numpy</code>, <code>soundfile</code></td>
+      </tr>
+      <tr>
+        <td>Container</td>
+        <td><code>analyst</code></td>
+      </tr>
+    </table>
+
+    <h3>Mục tiêu học tập</h3>
+    <p>
+      Bài lab giúp sinh viên hiểu cách thức hoạt động của kỹ thuật
+      <strong>Bipolar Backward-Forward Echo Hiding</strong> (BBFEH) trong giấu tin âm thanh.
+      Sinh viên sẽ quan sát cấu trúc kernel BBFEH, nhúng chuỗi bit vào file âm thanh,
+      tạo ảnh phổ để so sánh file gốc và file stego, sau đó tách lại thông điệp bằng phân tích
+      <strong>Real Cepstrum</strong>.
+    </p>
+
+    <h3>Kỹ năng đạt được</h3>
+    <ul>
+      <li>Sử dụng <code>ffprobe</code> và <code>sox</code> để kiểm tra thông tin file âm thanh.</li>
+      <li>Hiểu vai trò của các tham số <code>d0</code>, <code>d1</code>, <code>alpha</code> và độ dài đoạn <code>L</code>.</li>
+      <li>Quan sát kernel BBFEH gồm 4 xung echo có tính đối xứng thời gian và lưỡng cực.</li>
+      <li>Thực hiện nhúng chuỗi bit vào audio để tạo file <code>stego.wav</code>.</li>
+      <li>So sánh phổ tín hiệu của file cover và stego bằng spectrogram.</li>
+      <li>Tách tin bằng cách so sánh đỉnh cepstrum tại hai vị trí trễ <code>d0</code> và <code>d1</code>.</li>
+    </ul>
+
+    <h2>2. Kịch bản</h2>
+    <p>
+      <strong>Tình huống:</strong> Sinh viên đóng vai trò là chuyên viên phân tích tín hiệu âm thanh.
+      Nhiệm vụ là tìm hiểu cách một chuỗi bit ngắn được giấu vào file âm thanh bằng BBFEH,
+      đồng thời kiểm chứng rằng thông điệp có thể được tách lại từ file stego.
+    </p>
+    <p>
+      <strong>Vấn đề:</strong> Echo Hiding không thay đổi trực tiếp nội dung văn bản trong file âm thanh,
+      mà thêm các bản sao trễ rất nhỏ của tín hiệu. Với BBFEH, mỗi bit được biểu diễn bằng sự khác biệt
+      giữa hai vị trí delay <code>d0</code> và <code>d1</code>. Người học cần hiểu quá trình này ở cả hai chiều:
+      giấu tin và tách tin.
+    </p>
+    <h3>Vai trò của sinh viên: Audio Steganography Analyst</h3>
+
+    <div class="topology">
+      <div class="topo-diagram">
+        <div class="topo-node">
+          <div style="font-weight:bold; font-size:11pt;">cover.wav</div>
+          <div class="node-label">audio gốc</div>
+          <div class="node-ip">audio/cover.wav</div>
+        </div>
+        <div class="topo-arrow">
+          <div class="arrow-label">embed.py</div>
+          <svg width="80" height="16" viewBox="0 0 110 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <line x1="0" y1="8" x2="95" y2="8" stroke="#c0392b" stroke-width="2" />
+            <polygon points="95,3 110,8 95,13" fill="#c0392b" />
+          </svg>
+          <div class="arrow-label">BBFEH kernel</div>
+        </div>
+        <div class="topo-node embed">
+          <div style="font-weight:bold; font-size:11pt;">stego.wav</div>
+          <div class="node-label">audio chứa tin</div>
+          <div class="node-ip">message.txt</div>
+        </div>
+        <div class="topo-arrow">
+          <div class="arrow-label">detector.py</div>
+          <svg width="80" height="16" viewBox="0 0 110 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <line x1="0" y1="8" x2="95" y2="8" stroke="#216e39" stroke-width="2" />
+            <polygon points="95,3 110,8 95,13" fill="#216e39" />
+          </svg>
+          <div class="arrow-label">cepstrum</div>
+        </div>
+        <div class="topo-node extract">
+          <div style="font-weight:bold; font-size:11pt;">Recovered bits</div>
+          <div class="node-label">thông điệp tách được</div>
+          <div class="node-ip">BER = 0%</div>
+        </div>
+      </div>
+    </div>
+
+    <h2>3. Kiến thức bổ trợ</h2>
+
+    <h3>Echo Hiding</h3>
+    <p>
+      Echo Hiding là kỹ thuật giấu tin bằng cách thêm một hoặc nhiều bản sao trễ của tín hiệu âm thanh gốc.
+      Độ trễ echo rất nhỏ nên người nghe khó nhận ra, nhưng khi phân tích cepstrum, các vị trí delay có thể
+      tạo ra đỉnh đặc trưng. Bit 0 và bit 1 được phân biệt bằng hai delay khác nhau.
+    </p>
+
+    <h3>Bipolar Backward-Forward Echo Hiding</h3>
+    <p>
+      BBFEH kết hợp hai ý tưởng: <strong>đối xứng thời gian</strong> của Backward-Forward Echo Hiding và
+      <strong>lưỡng cực dương/âm</strong> của Bipolar Echo Hiding. Kernel BBFEH có bốn xung:
+      hai xung tại <code>±d0</code> và hai xung tại <code>±d1</code>. Các xung được chia biên độ
+      theo <code>alpha/4</code> để giữ tổng mức echo nhỏ, giúp tín hiệu stego khó bị nhận biết bằng tai.
+    </p>
+
+    <h3>Logic tách tin bằng Real Cepstrum</h3>
+    <p>
+      Khi tách tin, tín hiệu stego được chia thành từng đoạn có độ dài <code>L</code>. Với mỗi đoạn,
+      detector tính Real Cepstrum và so sánh giá trị tại hai vị trí trễ:
+    </p>
+    <pre><span class="cmd">Nếu cepstrum[d0] &gt; cepstrum[d1]  → bit 0
+Nếu cepstrum[d1] &gt; cepstrum[d0]  → bit 1</span></pre>
+
+    <table>
+      <tr>
+        <th>Tham số</th>
+        <th>Ý nghĩa</th>
+      </tr>
+      <tr>
+        <td><code>d0</code></td>
+        <td>Delay dùng để biểu diễn bit 0 hoặc vị trí so sánh thứ nhất.</td>
+      </tr>
+      <tr>
+        <td><code>d1</code></td>
+        <td>Delay dùng để biểu diễn bit 1 hoặc vị trí so sánh thứ hai.</td>
+      </tr>
+      <tr>
+        <td><code>alpha</code></td>
+        <td>Biên độ echo. Alpha càng lớn thì detector dễ phát hiện hơn nhưng âm thanh dễ bị biến đổi hơn.</td>
+      </tr>
+      <tr>
+        <td><code>L</code></td>
+        <td>Độ dài mỗi đoạn nhúng một bit. L lớn thường giúp tách tin ổn định hơn nhưng làm giảm dung lượng.</td>
+      </tr>
+    </table>
+
+    <div class="box box-warning">
+      <strong>Lưu ý:</strong> Trong lab này, sinh viên không cần tự lập trình thuật toán từ đầu.
+      Các script <code>embed.py</code> và <code>detector.py</code> đã được cung cấp để tập trung vào việc
+      quan sát quy trình giấu tin và tách tin.
+    </div>
+
+    <h2>4. Các nhiệm vụ của bài thực hành</h2>
+
+    <div class="box box-warning">
+      <strong>Khởi động Lab:</strong><br />
+      Trước khi bắt đầu bài thực hành, sinh viên cần tải module lab, tải image Docker và khởi động môi trường Labtainers:
+<pre><span class="cmd">imodule https://raw.githubusercontent.com/namdory13/bbfeh-fundamentals/main/bbfeh-fundamentals.tar.xz</span>
+<span class="cmd">docker pull namdory13/bbfeh-fundamentals.analyst.student:latest</span>
+<span class="cmd">labtainer bbfeh-fundamentals -r</span></pre>
+    </div>
+
+    <p>
+      Sau khi khởi động lab, sinh viên làm việc trong terminal <code>analyst</code>.
+      File âm thanh gốc nằm tại <code>/home/ubuntu/audio/cover.wav</code>.
+      Thông điệp cần giấu nằm trong <code>message.txt</code>.
+    </p>
+
+    <div class="box box-info">
+      <strong>Quy trình chung:</strong><br />
+      Kiểm tra audio → quan sát kernel BBFEH → nhúng tin → so sánh cover/stego → tách tin bằng cepstrum → ghi nhận kết quả.
+    </div>
+
+    <div class="task-block">
+      <div class="task-header">Chuẩn bị — Kiểm tra môi trường và file âm thanh</div>
+      <div class="task-body">
+        <p>Kiểm tra các file được cung cấp trong thư mục làm việc:</p>
+        <pre><span class="cmd">ls</span>
+<span class="cmd">ls audio</span>
+<span class="cmd">cat message.txt</span></pre>
+
+        <p>Kiểm tra thông tin file audio bằng <code>ffprobe</code>:</p>
+        <pre><span class="cmd">ffprobe audio/cover.wav</span></pre>
+
+        <p>Thống kê tín hiệu audio bằng <code>sox</code>:</p>
+        <pre><span class="cmd">sox audio/cover.wav -n stat</span></pre>
+
+        <div class="box box-success">
+          <strong>Kết quả kỳ vọng:</strong> Sinh viên xác định được file <code>cover.wav</code> tồn tại,
+          đọc được thông tin định dạng, tần số lấy mẫu và thống kê cơ bản của tín hiệu.
+        </div>
+      </div>
+    </div>
+
+    <div class="task-block">
+      <div class="task-header">Nhiệm vụ 1 — Quan sát kernel BBFEH</div>
+      <div class="task-body">
+        <p>
+          Xem mô tả kernel BBFEH và tạo hình minh họa các xung echo bằng <code>gnuplot</code>.
+        </p>
+        <pre><span class="cmd">cat kernel_demo.txt</span>
+<span class="cmd">gnuplot plot_kernel.gnu</span>
+<span class="cmd">ls kernel.png</span></pre>
+
+        <div class="box box-success">
+          <strong>Điều kiện hoàn thành:</strong> Tạo được file <code>kernel.png</code> và hiểu rằng BBFEH sử dụng
+          bốn xung echo tại các vị trí <code>±d0</code>, <code>±d1</code>.
+        </div>
+
+        <div class="box box-danger">
+          <strong>Câu hỏi 1:</strong><br />
+          Vì sao BBFEH dùng bốn xung echo thay vì chỉ một xung như Single Echo Hiding?
+          <br /><strong>Trả lời:</strong> _______________________________________
+        </div>
+      </div>
+    </div>
+
+    <div class="task-block">
+      <div class="task-header">Nhiệm vụ 2 — Giấu tin vào âm thanh</div>
+      <div class="task-body">
+        <p>
+          Kiểm tra thông điệp cần giấu, sau đó chạy script nhúng tin để tạo file <code>stego.wav</code>.
+        </p>
+        <pre><span class="cmd">cat message.txt</span>
+<span class="cmd">python3 embed.py</span>
+<span class="cmd">ls stego.wav</span></pre>
+
+        <p>
+          Script sẽ in ra quá trình nhúng từng bit vào từng segment của tín hiệu.
+        </p>
+
+        <div class="box box-success">
+          <strong>Điều kiện hoàn thành:</strong> Tạo được file <code>stego.wav</code> từ <code>audio/cover.wav</code>
+          và thông điệp trong <code>message.txt</code>.
+        </div>
+
+        <div class="box box-danger">
+          <strong>Câu hỏi 2:</strong><br />
+          Tham số <code>alpha</code> ảnh hưởng như thế nào đến khả năng nghe thấy echo và khả năng tách tin?
+          <br /><strong>Trả lời:</strong> _______________________________________
+        </div>
+      </div>
+    </div>
+
+    <div class="task-block">
+      <div class="task-header">Nhiệm vụ 3 — So sánh cover và stego</div>
+      <div class="task-body">
+        <p>
+          Tạo spectrogram cho file âm thanh gốc và file stego để quan sát sự khác biệt về mặt phổ tín hiệu.
+        </p>
+        <pre><span class="cmd">sox audio/cover.wav -n spectrogram -o cover.png</span>
+<span class="cmd">sox stego.wav -n spectrogram -o stego.png</span>
+<span class="cmd">ls cover.png stego.png</span></pre>
+
+        <div class="box box-success">
+          <strong>Điều kiện hoàn thành:</strong> Tạo được <code>cover.png</code> và <code>stego.png</code>.
+          Hai ảnh phổ thường khá giống nhau vì echo được thêm với biên độ nhỏ.
+        </div>
+
+        <div class="box box-danger">
+          <strong>Câu hỏi 3:</strong><br />
+          Vì sao file <code>stego.wav</code> có chứa tin ẩn nhưng spectrogram vẫn có thể gần giống file gốc?
+          <br /><strong>Trả lời:</strong> _______________________________________
+        </div>
+      </div>
+    </div>
+
+    <div class="task-block">
+      <div class="task-header">Nhiệm vụ 4 — Tách tin bằng Real Cepstrum</div>
+      <div class="task-body">
+        <p>
+          Chạy detector để chia file stego thành các segment, tính cepstrum và so sánh các giá trị tại <code>d0</code>
+          và <code>d1</code>.
+        </p>
+        <pre><span class="cmd">python3 detector.py stego.wav</span></pre>
+
+        <p>Kết quả thường có dạng:</p>
+        <pre><span class="cmd">Segment 0
+Cepstrum[d0] = ...
+Cepstrum[d1] = ...
+Extracted bit = ...
+
+Recovered message: 10101
+BER: 0%</span></pre>
+
+        <div class="box box-success">
+          <strong>Điều kiện hoàn thành:</strong> Detector tách được thông điệp và hiển thị <code>BER: 0%</code>.
+        </div>
+
+        <div class="box box-danger">
+          <strong>Câu hỏi 4:</strong><br />
+          Detector quyết định bit 0 hoặc bit 1 dựa trên đỉnh cepstrum tại <code>d0</code> và <code>d1</code> như thế nào?
+          <br /><strong>Trả lời:</strong> _______________________________________
+        </div>
+      </div>
+    </div>
+
+    <div class="task-block">
+      <div class="task-header">Nhiệm vụ 5 — Ghi nhận kết quả và hoàn tất checkwork</div>
+      <div class="task-body">
+        <p>
+          Sau khi hoàn thành các bước trên, lưu lịch sử lệnh để hệ thống Labtainers có thể kiểm tra thao tác:
+        </p>
+        <pre><span class="cmd">history -a</span>
+<span class="cmd">checkwork</span></pre>
+
+        <div class="box box-success">
+          <strong>Điều kiện hoàn thành:</strong> Hoàn thành tối thiểu 5 checkwork gồm kiểm tra audio,
+          quan sát kernel, nhúng tin, tạo spectrogram và tách tin.
+        </div>
+      </div>
+    </div>
+
+    <h3>Kết quả thường gặp trong lab</h3>
+    <table>
+      <tr>
+        <th>Thành phần</th>
+        <th>Kết quả kỳ vọng</th>
+        <th>Ý nghĩa</th>
+      </tr>
+      <tr>
+        <td><code>kernel.png</code></td>
+        <td>Được tạo thành công</td>
+        <td>Minh họa các xung echo của kernel BBFEH.</td>
+      </tr>
+      <tr>
+        <td><code>stego.wav</code></td>
+        <td>Được tạo thành công</td>
+        <td>File âm thanh đã được nhúng thông điệp.</td>
+      </tr>
+      <tr>
+        <td><code>cover.png</code>, <code>stego.png</code></td>
+        <td>Hai ảnh phổ gần giống nhau</td>
+        <td>Cho thấy tính khó nhận biết của kỹ thuật giấu tin bằng echo nhỏ.</td>
+      </tr>
+      <tr>
+        <td><code>detector.py stego.wav</code></td>
+        <td><code>Recovered message: 10101</code></td>
+        <td>Thông điệp được tách lại từ file stego.</td>
+      </tr>
+      <tr>
+        <td><code>BER</code></td>
+        <td><code>0%</code></td>
+        <td>Không có lỗi bit trong điều kiện lab cơ bản.</td>
+      </tr>
+    </table>
+
+    <h2>5. Câu hỏi tổng kết</h2>
+    <ol>
+      <li>BBFEH khác gì so với Single Echo Hiding?</li>
+      <li>Vai trò của hai delay <code>d0</code> và <code>d1</code> trong quá trình giấu và tách tin là gì?</li>
+      <li>Vì sao BBFEH sử dụng cả echo tiến và echo lùi?</li>
+      <li>Tại sao Real Cepstrum có thể phát hiện dấu vết echo trong tín hiệu âm thanh?</li>
+      <li>Nếu tăng <code>L</code>, dung lượng giấu tin và độ ổn định khi tách tin thay đổi như thế nào?</li>
+    </ol>
+
+    <div class="footer">
+      <p>Học viện Công nghệ Bưu chính Viễn thông — SecLab PTIT</p>
+      <p style="margin-top:4px">Bài thực hành được xây dựng trên nền tảng Labtainers, phục vụ học tập về audio steganography và cơ chế giấu/tách tin của BBFEH.</p>
+    </div>
+
+  </div>
+</body>
+
+</html>
